@@ -47,7 +47,7 @@ Mi participación
 - Reducción del tiempo de validación de aproximadamente 45 min a un promedio de 5m 10s (~89%).
 - Compatibilidad con 3 entornos de ejecución.
 - 7 desafíos técnicos resueltos.
-- Estabilización de pruebas y validaciónes pre-deployment.
+- Estabilización de pruebas y validaciones pre-deployment.
 - Reducción del esfuerzo de validación manual previo al deployment.
 - Generación automática de reportes como artifacts en Azure.
 
@@ -148,7 +148,7 @@ La suite de automatización está organizada en ámbitos de ejecución independi
 
 ### Solución:
 Implementé una estrategia que hace un ping a la API, que "despierta" el backend antes de cualquier prueba para evitar falsos positivos;
-después de validar con el equipo de desarrollo que éste error es un comportamiento esperado dada la aquitectura del servidor.
+después de validar con el equipo de desarrollo que éste error es un comportamiento esperado dada la arquitectura del servidor.
 
 Ejemplo:
 
