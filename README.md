@@ -1,4 +1,4 @@
-# BrandHub-Testing-Alset
+# BrandHub – E2E Automation Framework
 Framework de automatización E2E para BrandHub | Cypress | JS
 
 ---
