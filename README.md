@@ -1,5 +1,5 @@
-# BrandHub-Testing-Demo
-Framework de automatización E2E para BrandHub | Cypress | [Demo Portafolio].
+# BrandHub-Testing-Alset
+Framework de automatización E2E para BrandHub | Cypress | JS
 
 ---
 Diseñé e implementé una suite de automatización E2E con Cypress para BrandHub, una plataforma de branding con integraciones a modelos de IA generativa.
