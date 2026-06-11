@@ -1,7 +1,18 @@
+### Confidentiality Notice
+
+This repository contains an anonymized portfolio case study based on a real-world project.
+
+Company names, client information, URLs, credentials, proprietary business logic, and sensitive implementation details have been removed or modified to protect confidentiality.
+
+Any code snippets included are examples only and do not represent any protected production codebase.
+
+---
+
 # BrandHub – E2E Automation Framework
 Framework de automatización E2E para BrandHub | Cypress | JS
 
----
+--- 
+
 Diseñé e implementé una suite de automatización E2E con Cypress para BrandHub, una plataforma de branding con integraciones a modelos de IA generativa.
 
 La solución fue integrada en Azure DevOps para ejecutar Build Validation Testing (BVT) dentro del pipeline y preparada para validaciones Post-Deployment. 
