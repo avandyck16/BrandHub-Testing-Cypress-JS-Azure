@@ -66,59 +66,45 @@ Mi participación
 
 ## Alcance de la Solución
 
-| Suite                | Pruebas Cubiertas                                                                                                                                                                                                                                                 |
-| -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Smoke Tests**      | Login validation<br>Signup validation                                                                                                                                                                                                                         |
-| **Negative Tests**   | Invalid credentials<br>Empty user validation<br>Invalid email format validation<br>Short password validation<br>Required field validation                                                                                                                     |
-| **Regression Tests** | Login regression validation & UI<br>Signup regression validation & UI<br>Questionnaire flow validation<br>Password requirement validation<br>Terms and Conditions validation<br>Privacy Policy validation<br>External links validation<br>New tab navigation validation |
+La estrategia de automatización prioriza los flujos críticos, repetitivos y representativos del funcionamiento principal de la aplicación.
+
+| Flujo funcional                                 | Automatización  | Alcance                                  |
+| ----------------------------------------------- | --------------- | ---------------------------------------- |
+| Login                                           | Automatizado    | Flujo funcional y validaciones negativas |
+| Signup                                          | Automatizado    | Flujo funcional y validaciones negativas |
+| Questionnaire                                   | Automatizado    | Flujo principal                          |
+| Entrega de Color Palettes                       | Automatizado    | Validación de entrega de artefactos      |
+| Entrega de Brand Kit                            | Automatizado    | Validación de entrega de artefactos      |
+| Entrega de Assets                               | Automatizado    | Validación de entrega de artefactos      |
 
 --- 
 
 ## Estructura de carpetas.
 
 ```txt
-brandhub-tests/
-│
-├── cypress/
-│   ├── e2e/
-│   │   ├── 1-smoke/
-│   │   │   ├── login.cy.js
-│   │   │   └── signup.cy.js
-│   │   │
-│   │   ├── 2-negative/
-│   │   │   ├── login-negative.cy.js
-│   │   │   └── signup-negative.cy.js
-│   │   │
-│   │   └── 3-regression/
-│   │       ├── login-reg.cy.js
-│   │       ├── questionnaire.cy.js
-│   │       └── signup-reg.cy.js
-│   │
-│   ├── fixtures/
-│   │   └── bh-credentials.json
-│   │
-│   ├── reports/
-│   │
-│   └── support/
-│       ├── commands.js
-│       └── e2e.js
-│
-├── cypress.config.js
-├── package.json
-├── package-lock.json
+automated-tests/
+└── cypress/
+    └── e2e/
+        └── Regression-Tests/
+            ├── 1.login.cy.js
+            ├── 2.login.negative
+            ├── 3.signup
+            ├── 4.signup.negative
+            └── 5.questionnaire
+```
+Datos de prueba
+
+Se incorporan fixtures para centralizar información utilizada por las pruebas, particularmente datos necesarios para escenarios negativos.
+
+Ejemplo:
+
+```txt
+cypress/
+└── fixtures/
+    └── bh-credentials.json
 ```
 
 ---
-
-# Test Organization
-
-La suite de automatización está organizada en ámbitos de ejecución independientes:
-
-| Folder         | Propósito                                  |
-| -------------- | ------------------------------------------ |
-| `1-smoke`      | Validaciones del happy-path inicial        |
-| `2-negative`   | Manejo de errores                          |
-| `3-regression` | Cobertura extendida de regresión           |
 
 
 ---
@@ -127,18 +113,87 @@ La suite de automatización está organizada en ámbitos de ejecución independi
 
 | Script                  | Description                                |
 | ----------------------- | ------------------------------------------ |
-| `cy:smoke`              | Executes smoke suite in development        |
-| `cy:smoke-prod`         | Executes smoke suite in production         |
-| `cy:negative`           | Executes negative test suite               |
-| `cy:negative-prod`      | Executes negative suite in production      |
-| `cy:regression`         | Executes regression suite                  |
-| `cy:regression-prod`    | Executes regression suite in production    |
-| `cy:questionnaire`      | Executes questionnaire regression flow     |
-| `cy:questionnaire-prod` | Executes questionnaire flow in production  |
-| `cy:dev`                | Opens the debug UI in the dev environment  |
-| `cy:local`              | Opens the debug UI in the local environment|
+| `test:local`              | Executes Suites against localhost       |
+| `test:prod`         | Executes Suites against Production Environments         |
+| `test:dev`           | Executes  Suites against Development Environments               |
+| `debug:local`      | Executes Debugging Suites against localhost      |
+
+**Local**
+
+Permite ejecutar las pruebas contra una aplicación ejecutándose localmente mientras utiliza el API de desarrollo.
+
+**Development**
+
+Permite ejecutar la suite contra el ambiente de desarrollo desplegado.
+
+**Production**
+
+Permite ejecutar la suite contra la aplicación productiva utilizando el API correspondiente.
+
+**Debug**
+
+Se mantiene un comando específico para abrir Cypress en modo interactivo y facilitar la investigación de fallos durante el desarrollo o mantenimiento de las pruebas.
+
+Los valores específicos de URL, usuarios y credenciales se administran mediante variables de entorno y no forman parte del reporte.
+
+### Integración CI/CD
+
+Las pruebas Cypress están integradas dentro del pipeline de Azure DevOps como un stage de validación posterior al build.
+
+El flujo general es:
+
+```txt
+Build Application
+       ↓
+Publish Build Artifact
+       ↓
+Run Cypress Tests
+       ↓
+Publish Test Reports
+       ↓
+Publish Screenshots on Failure
+       ↓
+Continue Pipeline / Quality Gate
+       ↓
+Deploy
+```
+
+### Estrategia de validación antes del deployment
+
+La estrategia actual ejecuta Cypress contra el build de desarrollo servido localmente dentro del pipeline antes de realizar cualquier deployment.
+
+Esto permite validar el artefacto generado por el proceso de build antes de promoverlo al siguiente ambiente.
+
+| Situación      | Build inicial | Cypress | Build PROD | Deploy |
+| -------------- | ------------- | ------- | ---------- | ------ |
+| PR → `dev`     | DEV           | DEV     | —          | —      |
+| Merge → `dev`  | DEV           | DEV     | —          | DEV    |
+| PR → `main`    | DEV           | DEV     | —          | —      |
+| Merge → `main` | DEV           | DEV     | PROD       | PROD   |
+
 
 ---
+
+Preparación del entorno de ejecución
+
+El framework incorpora un comando personalizado para realizar una solicitud inicial al API antes de ejecutar las suites.
+
+El objetivo es mitigar posibles problemas asociados con cold starts del backend, especialmente cuando el servicio no ha recibido tráfico recientemente.
+
+La operación se ejecuta mediante un before global en support/e2e.js, evitando la necesidad de incorporar la preparación del API dentro de cada prueba individual.
+
+Conceptualmente:
+```txt
+Inicio de suite
+      ↓
+Wake-up / Ping API
+      ↓
+Aplicación disponible
+      ↓
+Ejecución de pruebas
+```
+
+El resultado esperado de esta solicitud se limita a códigos HTTP válidos para el endpoint utilizado como mecanismo de activación, evitando que la operación de wake-up se convierta en una validación funcional independiente.
 
 <sub>────────────────────────────────────────────────────────</sub>
 
@@ -164,24 +219,34 @@ después de validar con el equipo de desarrollo que éste error es un comportami
 Ejemplo:
 
 ```js
-describe("Login Flow - Brandhub", () => {
-  before(() => {
-    const API_URL = Cypress.env("API_URL");
-    cy.log(`API URL: ${API_URL}`);
-    cy.request({
-      method: "POST",
-      url: API_URL + "/api/[Described for privacy]",
-      failOnStatusCode: false,
-      body: {
-        username: "invalid@yopmail.com",
-        password: "invalidpass",
-        secured: false,
-      },
-    }).then((response) => {
-      cy.log(`Wake-up request status: ${response.status}`);
-      expect(response.status).to.be.oneOf([200, 400, 401]);
-    });
+Cypress.Commands.add("pingAPI", () => {
+  const API_URL = Cypress.env("API_URL");
+  cy.log(`API URL: ${API_URL}`);
+  cy.request({
+    method: "POST",
+    url: API_URL + "/api/connect/login",
+    failOnStatusCode: false,
+    body: {
+      username: "invalid@yopmail.com",
+      password: "invalidpass",
+      secured: false,
+    },
+  }).then((response) => {
+    cy.log(`Wake-up request status: ${response.status}`);
+    expect(response.status).to.be.oneOf([200, 400, 401]);
+  });
+});
 ```
+
+Y corre directamente al inicio de cada test dentro de `e2e.js`
+
+```js
+before(() => {
+  cy.pingAPI();
+});
+
+```
+
 <sub>────────────────────────────────────────────────────────</sub>
 
 ### Problema 2:
