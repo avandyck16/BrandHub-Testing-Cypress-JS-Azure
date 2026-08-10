@@ -92,7 +92,7 @@ automated-tests/
             ├── 4.signup.negative
             └── 5.questionnaire
 ```
-Datos de prueba
+### Datos de prueba
 
 Se incorporan fixtures para centralizar información utilizada por las pruebas, particularmente datos necesarios para escenarios negativos.
 
@@ -118,25 +118,25 @@ cypress/
 | `test:dev`           | Executes  Suites against Development Environments               |
 | `debug:local`      | Executes Debugging Suites against localhost      |
 
-**Local**
+ℹ️ **Local**
 
 Permite ejecutar las pruebas contra una aplicación ejecutándose localmente mientras utiliza el API de desarrollo.
 
-**Development**
+ℹ️ **Development**
 
 Permite ejecutar la suite contra el ambiente de desarrollo desplegado.
 
-**Production**
+ℹ️ **Production**
 
 Permite ejecutar la suite contra la aplicación productiva utilizando el API correspondiente.
 
-**Debug**
+ℹ️ **Debug**
 
 Se mantiene un comando específico para abrir Cypress en modo interactivo y facilitar la investigación de fallos durante el desarrollo o mantenimiento de las pruebas.
 
 Los valores específicos de URL, usuarios y credenciales se administran mediante variables de entorno y no forman parte del reporte.
 
-### Integración CI/CD
+## Integración CI/CD
 
 Las pruebas Cypress están integradas dentro del pipeline de Azure DevOps como un stage de validación posterior al build.
 
@@ -158,7 +158,7 @@ Continue Pipeline / Quality Gate
 Deploy
 ```
 
-### Estrategia de validación antes del deployment
+## Estrategia de validación antes del deployment
 
 La estrategia actual ejecuta Cypress contra el build de desarrollo servido localmente dentro del pipeline antes de realizar cualquier deployment.
 
@@ -344,24 +344,11 @@ const email = `testuser${Date.now()}@yopmail.com`;
 <sub>────────────────────────────────────────────────────────</sub>
 
 
-## Pipeline.
 
-- La suite se integra con Azure DevOps para ejecutar validaciones automáticas antes del deployment y generar artifacts accesibles desde el pipeline.
-
-<img width="1223" height="490" alt="image" src="https://github.com/user-attachments/assets/3fc4bbd1-7e0e-4a3d-aed9-6e4eb869e06b" />
-
-<sub>────────────────────────────────────────────────────────</sub>
-
-## Reporte HTML.
-
-Los resultados de ejecución se generan automáticamente en formato HTML y JSON para facilitar el análisis de resultados y seguimiento de ejecuciones.
-<img width="1843" height="890" alt="image" src="https://github.com/user-attachments/assets/98b9d7e9-4961-4405-93a8-a13ad3a6816e" />
-
-<sub>────────────────────────────────────────────────────────</sub>
 
 ## Conclusión
 
-La implementación de esta suite permitió automatizar validaciones críticas del producto mediante pruebas E2E organizadas por niveles de cobertura (Smoke, Negative y Regression), integradas dentro del proceso de CI/CD.
+La implementación de esta suite permitió automatizar validaciones críticas del producto mediante pruebas E2E organizadas por niveles de cobertura, integradas dentro del proceso de CI/CD.
 
 Además de reducir el esfuerzo de validación manual previo al deployment, la solución resolvió diversos desafíos técnicos relacionados con estabilidad, manejo de datos dinámicos, elementos asíncronos, generación de contenido mediante IA y ejecución en múltiples entornos.
 
@@ -369,13 +356,5 @@ La arquitectura del framework fue diseñada para ser mantenible y adaptable, per
 
 <sub>────────────────────────────────────────────────────────</sub>
 
-## Ejemplos de integración
-
-| Modelo                         | Flujo                                              |
-| ------------------------------ | -------------------------------------------------- |
-| Build Validation Testing (BVT) | Build → Test → Deploy                              |
-| Post-Deployment Testing        | Build → Deploy → Test                              |
-| Multi-Environment Validation   | Build Dev → Deploy Dev → Test → Deploy Prod → Test |
-| Extended Validation Pipeline   | Build → Test → Deploy → Test Prod → Final Report   |
 
 
