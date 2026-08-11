@@ -323,28 +323,7 @@ Ejemplo:
 const email = `testuser${Date.now()}@yopmail.com`;
 ```
 
-<sub>────────────────────────────────────────────────────────</sub>
-
-### Problema 7:
-
-- La generación y carga de reportes al contenedor de Azure solo ocurría cuando las pruebas se ejecutaban mediante scripts específicos como `npm run cy:smoke`.
-- El diseño del pipeline requería la ejecución de la suite completa para validar el deployment.
-
-### Solución
-
-- Se ajustó la configuración del pipeline para que la máquina virtual de Ubuntu generara y publicara automáticamente los reportes como artifacts accesibles desde Azure DevOps, independientemente del tipo de ejecución utilizada.
-
-
-
-<img width="1415" height="445" alt="image" src="https://github.com/user-attachments/assets/467788fc-8fde-4cff-a2b9-66193a401c97" />
-
-<img width="1009" height="833" alt="image" src="https://github.com/user-attachments/assets/f6f50d33-d22b-4025-ab51-7038822769b3" />
-
-
-<sub>────────────────────────────────────────────────────────</sub>
-
-
-
+--- 
 
 ## Conclusión
 
