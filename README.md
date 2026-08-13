@@ -1,11 +1,3 @@
-Sí. Este caso tiene muy buen material, pero **sí necesita compactarse bastante** para alinearlo con el estándar de 3PLicity. También detecté algo importante: el documento todavía describe el **pipeline anterior**, así que voy a reemplazarlo por el flujo actual que definimos.
-
-Además, quitaría todos los `<sub>────</sub>`; ya no aportan mucho visualmente y el nuevo esquema de headings/secciones genera suficiente separación.
-
-Te propongo esta versión:
-
----
-
 # Confidentiality Notice
 
 > This repository contains an anonymized portfolio case study based on a real-world project.
