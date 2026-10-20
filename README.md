@@ -7,131 +7,91 @@
 > Any code snippets included are examples only and do not represent any protected production codebase.
 
 ---
-
 # BrandHub — E2E Automation Framework
 
 **AI-Powered Branding Platform | Cypress | JavaScript | Azure DevOps | CI/CD**
 
-E2E automation framework designed to validate critical workflows within an AI-powered branding platform and integrate automated validation into the software delivery pipeline.
+E2E automation framework for validating critical workflows in an AI-powered branding platform and integrating automated testing into Azure DevOps.
 
----
+- **~89% less validation time:** from ~45 minutes to ~5 minutes 10 seconds.
+- **36 automated scenarios** covering critical functional and negative workflows.
+- **3 environments:** Local, Development, and Production.
+- **Azure DevOps quality gate** for pre-deployment validation.
+- **Automated reports** published as pipeline artifacts.
 
 ## Quick Scope
 
-| Area                    | Details                                    |
-| ----------------------- | ------------------------------------------ |
-| **Role**                | QA Engineer                                |
-| **Testing**             | E2E · Regression · Negative                |
-| **Automation**          | Cypress · JavaScript                       |
-| **Reporting**           | Mochawesome                                |
-| **CI/CD**               | Azure DevOps Pipelines                     |
-| **Cloud**               | Azure Static Web Apps · Azure Blob Storage |
-| **Environments**        | Local · Development · Production           |
-| **AI Integration**      | Generative AI workflows                    |
-| **Automated Scenarios** | 36                                         |
+| Category | Details |
+|---|---|
+| Role | QA Engineer |
+| Testing | E2E, Regression, Negative |
+| Automation | Cypress, JavaScript |
+| Reporting | Mochawesome |
+| CI/CD | Azure DevOps Pipelines, YAML |
+| Environments | Local, Development, Production |
+| Automated Scenarios | 36 |
 
-### Key Results
+## 1. Project Overview
 
-* **~89% reduction** in validation time: ~45 min → ~5m 10s.
-* **36 automated scenarios** covering critical product workflows.
-* Execution across **3 environments**.
-* Automated BVT integrated into Azure DevOps.
-* Automated test reports published as pipeline artifacts.
-* Resolved **7 technical challenges** involving backend availability, selectors, asynchronous rendering, AI response times, dynamic data, and reporting.
-* Improved E2E stability and reduced manual validation effort before deployment.
+**Objective:** Automate high-value user journeys and integrate E2E validation into the delivery workflow.
 
----
+As the QA Engineer responsible for the framework, I developed and maintained Cypress tests, improved selector stability, handled asynchronous workflows, generated dynamic test data, and integrated automated execution and reporting into Azure DevOps.
 
-## Case Study Index
+**Technology Stack:** Cypress · JavaScript · Azure DevOps · YAML · Mochawesome · Azure Static Web Apps · GitHub
 
-* [Project Overview](#project-overview)
-* [QA Strategy](#qa-strategy)
-* [Automation Scope & Decisions](#automation-scope--decisions)
-* [Technical Implementation](#technical-implementation)
-* [Test Architecture](#test-architecture)
-* [CI/CD & Reporting](#cicd--reporting)
-* [Results](#results)
-* [Limitations & Known Issues](#limitations--known-issues)
+## 2. QA Strategy and Automation Scope
 
----
+The suite prioritizes repetitive, business-critical workflows suitable for repeatable regression and pre-deployment validation.
 
-# Project Overview
+| Workflow | Coverage |
+|---|---|
+| Login | Functional and negative scenarios |
+| Signup | Registration and negative scenarios |
+| Questionnaire | Main continuous E2E workflow |
+| Color Palette Delivery | Generated artifact delivery |
+| Brand Kit Delivery | Generated artifact delivery |
+| Assets Delivery | Generated asset delivery |
 
-## Context
+The suite provides representative coverage of critical workflows, not complete application coverage.
 
-BrandHub is an AI-powered branding platform that uses generative AI integrations to assist users in creating branding materials and digital assets.
+## 3. Test Architecture
 
-The platform includes workflows such as authentication, registration, questionnaires, brand definition, and delivery of generated branding artifacts.
+Tests are organized by functional workflow, with negative cases separated where appropriate.
 
-## Objective
+```text
+automated-tests/
+└── cypress/
+    ├── e2e/
+    │   └── Regression-Tests/
+    │       ├── 1.login.cy.js
+    │       ├── 2.login.negative.cy.js
+    │       ├── 3.signup.cy.js
+    │       ├── 4.signup.negative.cy.js
+    │       └── 5.questionnaire.cy.js
+    └── fixtures/
+        └── bh-credentials.json
+```
 
-Design and implement E2E automation focused on critical and repetitive workflows, with the additional goal of integrating automated validation into CI/CD as a Build Validation Testing (BVT) quality gate.
+Fixtures centralize reusable test data, including credentials used by negative scenarios.
 
-The framework was designed to support execution against Local, Development, and Production environments.
+## 4. Execution and Environment Strategy
 
-## My Role
+NPM scripts support local execution, environment-specific runs, and interactive debugging. URLs and credentials are supplied through environment configuration rather than committed to the repository.
 
-* Designed E2E test coverage for critical business workflows.
-* Developed and maintained Cypress/JavaScript specifications.
-* Added automation-oriented selectors to the frontend.
-* Implemented dynamic test data generation.
-* Maintained and optimized test suites.
-* Investigated flaky tests and execution failures.
-* Implemented the automation framework and integrated it with Azure DevOps pipelines.
-* Configured multi-environment execution.
-* Implemented automated reporting and pipeline artifacts.
+| Script | Purpose |
+|---|---|
+| `test:local` | Run against the local application |
+| `test:dev` | Run against Development |
+| `test:prod` | Run against Production |
+| `debug:local` | Open Cypress interactively |
 
-## Technology Stack
+## 5. Technical Implementation & Helpers
 
-* Cypress
-* JavaScript
-* Azure DevOps
-* YAML Pipelines
-* Mochawesome Reporter
-* Azure Static Web Apps
-* Azure Blob Storage
-* Azure CLI
-* dotenv-cli
-* GitHub
+### Backend Availability — `pingAPI()`
 
----
+**Challenge:** The backend could become inactive after extended periods without traffic, causing initial test failures.
 
-# QA Strategy
-
-The automation strategy prioritized workflows that were:
-
-* Business-critical.
-* Repetitive.
-* Representative of the core product experience.
-* Suitable for reliable E2E validation.
-* Valuable for pre-deployment regression coverage.
-
-The suite combines functional and negative validations across authentication, registration, questionnaire processing, and generated branding artifacts.
-
----
-
-# Automation Scope & Decisions
-
-| Flow                    | Decision   | Coverage                     |
-| ----------------------- | ---------- | ---------------------------- |
-| Login                   | ✅ Automate | Functional + Negative        |
-| Signup                  | ✅ Automate | Functional + Negative        |
-| Questionnaire           | ✅ Automate | Main E2E workflow            |
-| Color Palettes Delivery | ✅ Automate | Artifact delivery validation |
-| Brand Kit Delivery      | ✅ Automate | Artifact delivery validation |
-| Assets Delivery         | ✅ Automate | Artifact delivery validation |
-
-The selected workflows represent the highest-value automated coverage currently implemented for the platform.
-
----
-
-# Technical Implementation
-
-## Backend Availability — Cold Starts
-
-The backend could enter a suspended state after extended periods without traffic, causing initial test failures unrelated to application functionality.
-
-**Implementation:** Added a reusable API wake-up command executed before the test suite to initialize the backend and prevent false negatives.
+**Implementation:** Added a reusable API request before the suite to help wake up the backend.
 
 ```javascript
 Cypress.Commands.add("pingAPI", () => {
@@ -147,12 +107,12 @@ Cypress.Commands.add("pingAPI", () => {
       secured: false,
     },
   }).then((response) => {
-    expect(response.status).to.be.oneOf([200, 400, 401]);
+    expect(response.status).to.be.oneOf([200, 400, 401, 405]);
   });
 });
 ```
 
-Executed globally through:
+The command runs from the suite-level setup hook:
 
 ```javascript
 before(() => {
@@ -160,47 +120,37 @@ before(() => {
 });
 ```
 
-**Result:** Reduced false failures caused by backend cold starts and improved suite reliability.
+**Result:** Helps reduce false failures associated with backend cold starts. It is a wake-up request, not a comprehensive health check.
 
----
+### Automation-Oriented Selectors
 
-## Automation-Oriented Selectors
+**Challenge:** Some UI elements lacked stable selectors, increasing test fragility.
 
-Several UI elements lacked stable selectors, increasing test fragility.
+**Implementation:** Worked with development to introduce dedicated `data-cy` attributes for automation.
 
-**Implementation:** Collaborated with development to introduce dedicated `data-cy` selectors for automation.
+**Result:** Improved selector stability and reduced dependence on changes to the UI structure.
 
-**Result:** Improved selector stability and reduced failures caused by changes in UI structure.
+### Asynchronous Rendering
 
-![Automation selector implementation](https://github.com/user-attachments/assets/cba89f29-43cf-490f-b6b8-61d2b8b2dd6a)
+**Challenge:** Some elements rendered asynchronously or outside the expected DOM structure.
 
----
+**Implementation:** Investigated the rendering behavior and collaborated with development to address the underlying implementation. Dedicated automation selectors were incorporated where needed.
 
-## Asynchronous Rendering
+**Result:** Stabilized affected E2E scenarios and improved rendering consistency.
 
-Some elements were rendered asynchronously or outside the expected DOM structure, resulting in intermittent test failures.
+### Continuous Questionnaire Workflow
 
-**Implementation:** Investigated the rendering behavior and worked with development to correct the underlying implementation. Dedicated automation selectors were then incorporated.
+**Challenge:** The questionnaire depended on persistent session state, dynamically generated URLs, and sequential user context.
 
-**Result:** Stabilized affected E2E scenarios and improved UI rendering consistency.
+**Implementation:** Kept dependent steps within one continuous E2E scenario, validating questions, inputs, and expected results sequentially.
 
----
+**Result:** Preserved workflow state and reduced failures caused by separating dependent steps into independent tests.
 
-## Continuous Questionnaire Workflow
+### Generative AI Response Times
 
-The questionnaire depended on persistent session state, dynamically generated URLs, and sequential user context.
+**Challenge:** An AI model update increased name-generation response times beyond Cypress's default waiting behavior.
 
-**Implementation:** Designed the questionnaire as a single continuous E2E scenario, maintaining the user session while validating each question, input, and expected result sequentially.
-
-**Result:** Preserved workflow state and prevented failures caused by splitting dependent steps across independent tests.
-
----
-
-## Generative AI Response Times
-
-A generative AI model update increased the response time for name generation beyond Cypress's default waiting behavior.
-
-**Implementation:** Added a Cypress network intercept to wait for the specific API response and extended the timeout for the AI operation.
+**Implementation:** Used `cy.intercept()` to synchronize with the API response and extended the timeout for the AI operation.
 
 ```javascript
 cy.intercept("POST", "[Described for privacy]").as("generateContent");
@@ -218,171 +168,106 @@ cy.contains(
 ).should("be.visible");
 ```
 
-**Result:** Reliable validation of AI-generated content without premature test failures.
+**Result:** Improved synchronization with the AI workflow and reduced premature failures.
 
----
+*The endpoint shown above is redacted in the public example.*
 
-## Dynamic Test Data
+### Dynamic Test Data
 
-Registration workflows required unique users on every execution to prevent account duplication.
+**Challenge:** Reusing email addresses caused registration conflicts when accounts already existed.
 
-**Implementation:** Generated unique credentials dynamically during test execution.
+**Implementation:** Generated unique email values using a timestamp.
 
 ```javascript
 const email = `cypress_user${Date.now()}@yopmail.com`;
 ```
 
-**Result:** Enabled repeatable registration testing without conflicts caused by previously created accounts.
+**Result:** Reduced duplicate-account conflicts between test executions.
 
----
+### Automated Reporting
 
-## Automated Reporting
+**Challenge:** Execution results needed to remain accessible after pipeline runs.
 
-Test execution results needed to be accessible from Azure DevOps for analysis after pipeline execution.
+**Implementation:** Integrated Mochawesome and configured Azure DevOps to publish generated reports as pipeline artifacts.
 
-**Implementation:** Integrated Mochawesome reporting and configured the pipeline to publish generated reports as artifacts.
+**Result:** Centralized execution evidence, screenshots on failure, and report access for post-run analysis.
 
-**Result:** Centralized execution evidence and improved failure analysis after automated runs.
+## 6. CI/CD and Reporting
 
----
+The Cypress suite is integrated into Azure DevOps as a pre-deployment quality gate. A push or merge to `dev` or `main` triggers the corresponding pipeline flow.
 
-# Test Architecture
-
-The framework separates E2E regression scenarios within the Cypress structure:
+### Pipeline Flow
 
 ```text
-automated-tests
-└── cypress
-    ├── e2e
-    │   └── Regression-Tests
-    │       ├── 1.login.cy.js
-    │       ├── 2.login.negative.cy.js
-    │       ├── 3.signup.cy.js
-    │       ├── 4.signup.negative.cy.js
-    │       └── 5.questionnaire.cy.js
-    │
-    └── fixtures
-        └── bh-credentials.json
+Push or merge to dev / main
+             |
+             v
+     Build application
+      (branch-specific)
+             |
+             v
+     Publish build artifact
+             |
+             v
+     Download build artifact
+             |
+             v
+ Serve artifact on localhost
+             |
+             v
+       Run Cypress
+             |
+        Tests pass?
+        /         \
+      No           Yes
+      |             |
+      v             v
+ Deployment      Deploy the same
+ blocked         tested artifact
+                 dev → DEV
+                 main → PROD
 ```
 
-Fixtures centralize reusable test data, particularly information required for negative scenarios.
+### How It Works
 
----
+1. **Branch-aware build:** The target branch determines the application build.
+2. **Build artifact:** The generated application is published as an artifact.
+3. **Pre-deployment testing:** The test stage downloads the artifact and serves it locally on the pipeline agent.
+4. **Cypress execution:** Tests run against the built application using the corresponding environment configuration.
+5. **Deployment gate:** A failed test stage blocks deployment; a successful run allows deployment to continue.
+6. **Environment-specific deployment:** The same tested artifact is deployed to DEV for `dev` or PROD for `main`.
 
-# Execution & Environment Strategy
+The application is tested from the build artifact served locally on the pipeline agent. It is not first deployed to a separate test website before Cypress runs.
 
-The framework supports independent execution against Local, Development, and Production environments.
+### Reporting
 
-| Script        | Purpose                                  |
-| ------------- | ---------------------------------------- |
-| `test:local`  | Execute suites against localhost         |
-| `test:dev`    | Execute suites against Development       |
-| `test:prod`   | Execute suites against Production        |
-| `debug:local` | Open Cypress interactively for debugging |
+Mochawesome reports are published as pipeline artifacts, providing:
 
-Environment-specific URLs and credentials are managed through environment variables and are not stored in the repository.
+- HTML and JSON execution reports.
+- Test results and failure details.
+- Cypress screenshots when tests fail.
+- Evidence for post-execution investigation.
 
----
+## 7. Results and Limitations
 
-# CI/CD & Reporting
+| Metric | Result |
+|---|---:|
+| Automated scenarios | **36** |
+| Manual validation | ~45 minutes |
+| Automated execution | ~5 min 10 sec |
+| Time reduction | **~89%** |
+| Supported environments | **3** |
+| Technical challenges documented | **7** |
 
-## Pipeline Strategy
+**Additional improvements:** More repeatable regression validation, improved E2E stability, dynamic registration data, backend cold-start mitigation, and automated reporting integrated into CI/CD.
 
-The Cypress suite is integrated into Azure DevOps as a validation gate before the final deployment.
+**Known limitations:**
 
-The target branch determines which build is generated and validated.
-
-### Development Flow
-
-```text
-Merge → dev
-   ↓
-Build DEV
-   ↓
-Deploy to Test Environment
-   ↓
-Execute Cypress Tests
-   ↓
-Tests Passed?
-   ├── No  → Pipeline Stops
-   └── Yes → Deploy to DEV
-```
-
-### Production Flow
-
-```text
-Merge → main
-   ↓
-Build PROD
-   ↓
-Deploy to Test Environment
-   ↓
-Execute Cypress Tests
-   ↓
-Tests Passed?
-   ├── No  → Pipeline Stops
-   └── Yes → Deploy to PROD
-```
-
-This approach ensures that the build intended for the target environment is validated before the final deployment.
-
-A failed Cypress execution prevents the corresponding deployment from continuing.
-
-## Test Reports
-
-Mochawesome reports are published as Azure pipeline artifacts, providing:
-
-* Execution results.
-* Failure details.
-* Screenshots on failure.
-* Post-execution evidence.
-* Historical analysis of test runs.
-
----
-
-# Results
-
-| Metric                        |   Result |
-| ----------------------------- | -------: |
-| Automated scenarios           |   **36** |
-| Manual validation time        |  ~45 min |
-| Automated execution           |  ~5m 10s |
-| Time reduction                | **~89%** |
-| Supported environments        |    **3** |
-| Technical challenges resolved |    **7** |
-
-### Functional Coverage
-
-* Login and authentication.
-* Signup and account creation.
-* Negative authentication and registration scenarios.
-* Questionnaire workflow.
-* Color Palette delivery.
-* Brand Kit delivery.
-* Generated Assets delivery.
-* Generative AI response validation.
-
-### Additional Improvements
-
-* Reduced manual pre-deployment validation effort.
-* Improved E2E test stability.
-* Automated test reporting.
-* CI/CD integration.
-* Multi-environment execution.
-* Dynamic test data generation.
-* Backend cold-start mitigation.
-* Automation-oriented frontend selectors.
-
----
-
-# Limitations & Known Issues
-
-* Some scenarios depend on external generative AI response times.
-* Backend availability may require an initial wake-up request after extended inactivity.
-* Some test data depends on environment configuration.
-* Production execution requires environment-specific credentials and configuration.
-* AI-generated responses may vary in content while remaining functionally valid.
-* The current automation scope focuses on the highest-value workflows rather than complete application coverage.
+- AI-generated responses can vary in content and timing.
+- Some workflows depend on session continuity.
+- Backend availability may require an initial wake-up request.
+- Environment-specific credentials and configuration are required.
+- The current suite prioritizes critical workflows rather than complete application coverage.
 
 ---
 
